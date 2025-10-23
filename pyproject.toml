@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drawio-rf"
+version = "0.1.0"
+description = "Tool to parse Draw.io RF diagrams, compute gains, and rewrite XML with power levels"
+authors = [
+    { name = "David Daminelli", email = "daviddaminelli@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["rf", "drawio", "electronics"]
+dependencies = [
+    "pandas",
+    "numpy",
+]
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+drawio-rf = "drawio_rf.compute:choose_file_and_run"
