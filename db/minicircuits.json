@@ -1,0 +1,74 @@
+{
+    "ZX10-2-12-S+":{
+        "ports": {"in": 1, "out": 2},
+        "gain": {"in-out": -3},
+        "max": {"in": 27}
+    },
+    "ZX30-12-4-S+":{
+        "ports": {"in": 1, "out": [2,["coup"]]},
+        "gain": {"in-out": -0.75, "in-coup": -12},
+        "max": {"in": 27}
+    },
+    "SLP-30+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -0.37},
+        "max": {"in": 27}
+    },
+    "ZX05-10L-S+":{
+        "ports" : {"in": [2,["LO", "IF"]], "out": [1, ["RF"]]},
+        "gain" : {"IF-RF": -7},
+        "max": {"IF": 27, "LO": 7},
+        "min": {"LO": 1}
+    },
+    "ST479":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -0.5},
+        "max": {"in": 27}
+    },
+    "ZX05-25MH-S+":{
+        "ports" : {"in": [2,["LO", "IF"]], "out": [1, ["RF"]]},
+        "gain" : {"IF-RF": -7},
+        "max": {"IF": 23, "LO": 16},
+        "min": {"LO": 10}
+    },
+    "VHF-1300+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -1},
+        "max": {"in": 38}
+    },
+    "ZX60-53LN+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": 20},
+        "max": {"in": 8}
+    },
+    "VLF-1200+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -0.3},
+        "max": {"in": 40}
+    },
+    "FK-3000+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -11},
+        "max": {"in": 33}
+    },
+    "ZX75BP-1034-S+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -0.7},
+        "max": {"in": 37}
+    },
+    "SLP-1200+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -0.5},
+        "max": {"in": 27}
+    },
+    "ZX10-4A-11-S+":{
+        "ports" : {"in": 1, "out": 4},
+        "gain" : {"in-out": -6.6},
+        "max": {"in": 34}
+    },
+    "ZCBP6-505-S+":{
+        "ports" : {"in": 1, "out": 1},
+        "gain" : {"in-out": -1.2},
+        "max": {"in": 43}
+    }
+    }
