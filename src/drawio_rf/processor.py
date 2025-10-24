@@ -18,7 +18,9 @@ def build_df(blocks, json_path):
         value = blocks[id]["value"]
 
         if value not in components:
-            raise ValueError(f"Component '{value}' (id: {id}) not found in components.json")
+            if value != "":
+                print(f"Component '{value}' (id: {id}) not found in components.json")
+            continue
 
         ports = components[value]["ports"]
 
