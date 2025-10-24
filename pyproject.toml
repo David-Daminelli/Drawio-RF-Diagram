@@ -21,3 +21,4 @@ where = ["src"]
 
 [project.scripts]
 drawio-rf = "drawio_rf.compute:choose_file_and_run"
+drawio-rf-reset = "drawio_rf.compute:reset_file"

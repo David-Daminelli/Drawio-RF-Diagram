@@ -1,4 +1,4 @@
-from .reader import read_drawio
+from .reader import read_drawio, reset_drawio
 from .processor import build_df
 from .writer import write_drawio
 import os
@@ -47,3 +47,22 @@ def choose_file_and_run():
             return
 
     compute_drawio(file_path)
+
+def reset_file():
+    # If no file path was passed as argument, open a file dialog
+    file_path = sys.argv[1] if len(sys.argv) > 1 else None
+
+    if not file_path:
+        root = tk.Tk()
+        root.withdraw()  # Hide the main Tk window
+
+        file_path = filedialog.askopenfilename(
+            title="Select Draw.io XML file",
+            filetypes=[("XML files", "*.xml"), ("All files", "*.*")]
+        )
+
+        if not file_path:
+            print("No file selected.")
+            return
+
+    reset_drawio(file_path)
