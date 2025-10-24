@@ -39,12 +39,14 @@ def choose_file_and_run():
 
         file_path = filedialog.askopenfilename(
             title="Select Draw.io XML file",
-            filetypes=[("XML files", "*.xml"), ("All files", "*.*")]
+            filetypes=[("Draw.io files", "*.xml, *.drawio"), ("All files", "*.*")]
         )
 
         if not file_path:
             print("No file selected.")
             return
+        else:
+            print(file_path)
 
     compute_drawio(file_path)
 
@@ -58,11 +60,13 @@ def reset_file():
 
         file_path = filedialog.askopenfilename(
             title="Select Draw.io XML file",
-            filetypes=[("XML files", "*.xml"), ("All files", "*.*")]
+            filetypes=[("Draw.io files", "*.xml, *.drawio"), ("All files", "*.*")]
         )
 
         if not file_path:
             print("No file selected.")
             return
+        else:
+            print(file_path)
 
     reset_drawio(file_path)
