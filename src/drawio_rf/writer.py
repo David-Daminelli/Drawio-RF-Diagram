@@ -20,7 +20,11 @@ def write_drawio(df_circuit, og_path, output_path=None):
                 is_out_of_range = edge_status_dict[edge_id]
 
                 # Set label as power with "dBm"
-                cell.set('value', f"{power_value:.2f} dBm")
+                try:
+                    cell.set('value', f"{power_value:.2f} dBm")
+                except:
+                    cell.set('value', f"NaN")
+
 
                 # Determine font color: red if out of range, green otherwise
                 color = '#FF0000' if is_out_of_range else '#00AA00'
