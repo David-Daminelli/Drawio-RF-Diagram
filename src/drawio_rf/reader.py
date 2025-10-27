@@ -1,6 +1,28 @@
 import xml.etree.ElementTree as ET
 
+import xml.etree.ElementTree as ET
+
+def reset_drawio(file_path):
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+
+    # Iterate through all elements in the XML
+    for cell in root.iter():
+        # Only modify elements that represent arrow connections in Draw.io
+        if cell.attrib.get('edge') == '1':
+            value = cell.attrib.get('value', "")
+            # If the value ends with 'dBm', clear it
+            if isinstance(value, str) and value.strip().endswith("dBm"):
+                cell.set('value', "")
+
+    # Save changes back to the same file
+    tree.write(file_path, encoding='utf-8', xml_declaration=True)
+
+
 def read_drawio(file_path):
+
+    reset_drawio(file_path)
+
     tree = ET.parse(file_path)
     root = tree.getroot()
 
