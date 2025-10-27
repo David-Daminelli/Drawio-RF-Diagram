@@ -24,37 +24,35 @@ def process_gain(df_circuit, components, param, it_lim = 500):
 
             # Iterate over all gain definitions for this component
             for gain_port, gain_value in gains.items():
-                inp, out = gain_port.split('-')
+                ports = gain_port.split('-') # All ports passed. Last one is always output
 
-                # Find input power
-                inp_rows = df_circuit[
+                rows = []
+                for p in ports:
+                    rows += [df_circuit[
                     (df_circuit['block_id'] == block_id) &
-                    (df_circuit['port_name'].str.contains(inp))
-                ]
+                    (df_circuit['port_name'].str.contains(p))]]
 
-                # Continue if there is no input connection...
-                if inp_rows.empty:
+                out_rows = rows[-1]
+
+                powers = []
+                for r in rows[:-1]:
+                    if r.empty:
+                        powers += [None]
+                        continue
+                    ipwr = r[param].iloc[0]
+                    powers += [ipwr]
+
+                if any(x is None for x in powers):
                     continue
-
-                # ... or there is no input power calculated yet
-                inp_power = inp_rows[param].iloc[0]
-                if inp_power is None:
-                    continue
-
-                # Find all output edges for this block
-                out_rows = df_circuit[
-                    (df_circuit['block_id'] == block_id) &
-                    (df_circuit['port_name'].str.contains(out))
-                ]
 
                 # Update all output powers
                 if param == 'power':
-                    calc = (inp_power + gain_value)
+                    calc = (powers[0] + gain_value)
                 elif param == 'frequency':
                     if isinstance(gain_value, list): # if value is list, so call the related function
-                        calc = getattr(funcs, gain_value[0])(inp_power, gain_value[1])
+                        calc = getattr(funcs, gain_value[0])(powers, gain_value[1])
                     else:
-                        calc = (inp_power*gain_value)
+                        calc = (powers[0]*gain_value)
 
                 mask = df_circuit['edge_id'].isin(out_rows['edge_id'])
                 for idx in df_circuit[mask].index:

@@ -16,6 +16,6 @@ def process_set(df_circuit, components, param):
 
             mask = df_circuit['edge_id'].isin(set_id)
             for idx in df_circuit[mask].index:
-                df_circuit.at[idx, param] = set_value
+                df_circuit.at[idx, param] = np.atleast_1d(set_value)
 
     return df_circuit
