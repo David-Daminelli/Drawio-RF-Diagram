@@ -15,6 +15,7 @@ keywords = ["rf", "drawio", "electronics"]
 dependencies = [
     "pandas",
     "numpy",
+    "engineering-notation"
 ]
 [tool.setuptools.packages.find]
 where = ["src"]

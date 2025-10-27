@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 import numpy as np
+from .process_gain import process_gain
+from .process_set import process_set
 
 def read_json(file):
     # if file is a string load json from path
@@ -64,6 +66,7 @@ def build_df(blocks, json_path):
                     "edge_id"   : con[0],
                     "connected_block": con[1],
                     "power"     : con[3],
+                    "frequency" : None,
                     "max" : components[value].get("max", {}).get(port_name, None),
                     "min" : components[value].get("min", {}).get(port_name, None),
                 })
@@ -71,59 +74,9 @@ def build_df(blocks, json_path):
 
     df_circuit = pd.DataFrame(rows)
 
-    circuit_comps = df_circuit['component'].unique()
-    for c in circuit_comps:
-
-        # set the power
-        for s in components[c].get("set", {}).items():
-            set_port  = s[0] # port that will be setted
-            set_value = s[1] # value to set
-
-            set_id = df_circuit.loc[(df_circuit['component'] == c) & (df_circuit['port_name'] == set_port), 'edge_id']
-            df_circuit.loc[df_circuit['edge_id'].isin(set_id), 'power'] = set_value
-
-    it_count = 0
-    while df_circuit['power'].isna().any():
-        if it_count > 500:
-            print("Exceeded maximum iterations while calculating powers. Possible open port.")
-            break
-        else:
-            it_count += 1
-
-        for block_id in df_circuit['block_id'].unique():
-            # Get the component type of this block
-            comp = df_circuit.loc[df_circuit['block_id'] == block_id, 'component'].iloc[0]
-
-            # Iterate over all gain definitions for this component
-            for gain_port, gain_value in components[comp].get('gain', {}).items():
-                inp, out = gain_port.split('-')
-
-                # Find input power
-                inp_rows = df_circuit[
-                    (df_circuit['block_id'] == block_id) &
-                    (df_circuit['port_name'].str.contains(inp))
-                ]
-                if inp_rows.empty:
-                    continue  # no input port found
-                inp_power = inp_rows['power'].iloc[0]
-                if inp_power is None:
-                    continue  # ignore if input power not defined
-
-                # Find all output edges for this block
-                out_rows = df_circuit[
-                    (df_circuit['block_id'] == block_id) &
-                    (df_circuit['port_name'].str.contains(out))
-                ]
-
-                # Update all output powers
-                df_circuit.loc[df_circuit['edge_id'].isin(out_rows['edge_id']), 'power'] = inp_power + gain_value
-
-    df_circuit['out_of_range'] = np.where(
-        (df_circuit['power'] > df_circuit['max']) | (df_circuit['power'] < df_circuit['min']),
-        True,
-        False
-    )
-    edge_out_of_range = df_circuit.groupby('edge_id')['out_of_range'].any()
-    df_circuit['out_of_range'] = df_circuit['edge_id'].map(edge_out_of_range)
+    for param in ["power", "frequency"]:
+        #df_circuit[param] = df_circuit[param].astype(object)
+        df_circuit = process_set(df_circuit, components, param=param)
+        df_circuit = process_gain(df_circuit, components, param=param)
 
     return df_circuit
