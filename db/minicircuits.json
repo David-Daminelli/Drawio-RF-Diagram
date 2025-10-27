@@ -70,5 +70,16 @@
         "ports" : {"in": 1, "out": 1},
         "gain"  : {"in-out": -1.2},
         "max"   : {"in": 43}
+    },
+    "Valon 3010a":{
+        "ports" : {"in": 1, "out": [3, ["OUT 1", "OUT 2", "OUT 3"]]},
+        "set"   : {"OUT 1": 6,"OUT 2": 6,"OUT 3": 23},
+        "max"   : {"in": 13},
+        "min"   : {"in": -20}
+    },
+    "generator AFE":{
+        "ports" : {"out": 1},
+        "set"   : {"out": 20},
+        "max"   : {"out": 30}
     }
-    }
+}
