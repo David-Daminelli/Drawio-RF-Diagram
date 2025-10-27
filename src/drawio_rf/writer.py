@@ -32,7 +32,7 @@ def write_drawio(df_circuit, og_path, output_path=None):
                     power_str = "NaN"
 
                 freq_value = np.atleast_1d(freq_value)
-                freq_str = "".join(f"{eng(f)}Hz\n" for f in freq_value)
+                freq_str = "".join(f"{eng(f, precision=3)}Hz\n" for f in freq_value)
 
                 # Final text using HTML
                 cell.set('value',
