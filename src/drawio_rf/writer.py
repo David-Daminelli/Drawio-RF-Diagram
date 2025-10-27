@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from engineering_notation import EngNumber as eng
+import numpy as np
 
 def write_drawio(df_circuit, og_path, output_path=None):
     if output_path is None:
@@ -26,11 +27,12 @@ def write_drawio(df_circuit, og_path, output_path=None):
 
                 # Set values to Nan in case of errors
                 try:
-                    freq_str = f"{eng(freq_value)}Hz" if freq_value is not None else ""
-                    power_str = f"{power_value:.2f} dBm"
+                    power_str = f"{power_value:.2f}dBm"
                 except:
                     power_str = "NaN"
-                    freq_str = ""
+
+                freq_value = np.atleast_1d(freq_value)
+                freq_str = "".join(f"{eng(f)}Hz\n" for f in freq_value)
 
                 # Final text using HTML
                 cell.set('value',

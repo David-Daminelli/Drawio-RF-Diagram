@@ -1,4 +1,6 @@
 import numpy as np
+from .functions import Functions
+funcs = Functions()
 
 def process_gain(df_circuit, components, param, it_lim = 500):
     it_count = 0
@@ -29,11 +31,15 @@ def process_gain(df_circuit, components, param, it_lim = 500):
                     (df_circuit['block_id'] == block_id) &
                     (df_circuit['port_name'].str.contains(inp))
                 ]
+
+                # Continue if there is no input connection...
                 if inp_rows.empty:
-                    continue  # no input port found
+                    continue
+
+                # ... or there is no input power calculated yet
                 inp_power = inp_rows[param].iloc[0]
                 if inp_power is None:
-                    continue  # ignore if input power not defined
+                    continue
 
                 # Find all output edges for this block
                 out_rows = df_circuit[
@@ -45,8 +51,14 @@ def process_gain(df_circuit, components, param, it_lim = 500):
                 if param == 'power':
                     calc = (inp_power + gain_value)
                 elif param == 'frequency':
-                    calc = (inp_power*gain_value)
-                df_circuit.loc[df_circuit['edge_id'].isin(out_rows['edge_id']), param] = calc
+                    if isinstance(gain_value, list): # if value is list, so call the related function
+                        calc = getattr(funcs, gain_value[0])(inp_power, gain_value[1])
+                    else:
+                        calc = (inp_power*gain_value)
+
+                mask = df_circuit['edge_id'].isin(out_rows['edge_id'])
+                for idx in df_circuit[mask].index:
+                    df_circuit.at[idx, param] = np.array(calc)
 
     if param == 'power':
         df_circuit['out_of_range'] = np.where(

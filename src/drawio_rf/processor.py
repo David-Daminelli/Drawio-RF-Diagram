@@ -75,6 +75,7 @@ def build_df(blocks, json_path):
     df_circuit = pd.DataFrame(rows)
 
     for param in ["power", "frequency"]:
+        #df_circuit[param] = df_circuit[param].astype(object)
         df_circuit = process_set(df_circuit, components, param=param)
         df_circuit = process_gain(df_circuit, components, param=param)
 
