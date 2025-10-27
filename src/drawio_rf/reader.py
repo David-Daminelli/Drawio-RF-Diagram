@@ -12,7 +12,7 @@ def reset_drawio(file_path):
         if cell.attrib.get('edge') == '1':
             value = cell.attrib.get('value', "")
             # If the value ends with 'dBm', clear it
-            if isinstance(value, str) and value.strip().endswith("dBm"):
+            if isinstance(value, str) and ("dBm" in value.strip()) or ("Hz" in value.strip()):
                 cell.set('value', "")
 
     # Save changes back to the same file
