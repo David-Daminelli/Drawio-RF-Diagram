@@ -4,11 +4,29 @@ A small utility that calculates power levels for a correctly formatted Draw.io b
 
 ---
 
+## Example
+
+Below is a simplified example of how the tool works.
+
+### Input diagram
+
+The diagram blocks and their parameters are defined in [`db/example.json`](db/example.json):
+
+![Example raw diagram](example/example_raw.png)
+
+### Computed diagram
+
+After running the script, the computed power and frequency values are automatically added to the diagram:
+
+![Example computed diagram](example/example_computed.png)
+
 ## Installation
 
-From the project root:
+Clone the repository and install it from the project root:
 
 ```bash
+git clone https://github.com/David-Daminelli/Drawio-RF-Diagram.git
+cd drawrio-rf
 pip install -e .
 ```
 
