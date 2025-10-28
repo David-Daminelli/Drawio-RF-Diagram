@@ -1,22 +1,23 @@
 {
     "generator": {
         "ports": {"out": 1},
-        "set": {"out": -5},
+        "set_power": {"out": -5},
+        "set_frequency": {"out": 500e6},
         "max": {"out": 30},
         "min": {"out": 0}
     },
     "attenuator 10dB": {
         "ports": {"in": 1, "out": 1},
-        "gain": {"in-out": -10},
+        "gain_power": {"in-out": -10},
         "max": {"in": 0}
     },
     "splitter": {
         "ports": {"in": 1, "out": 2},
-        "gain": {"in-out": -3}
+        "gain_power": {"in-out": -3}
     },
     "coupler": {
         "ports": {"in": 1, "out": [2, ["coup"]]},
-        "gain": {"in-out": -3, "in-coup": -20}
+        "gain_power": {"in-out": -3, "in-coup": -20}
     },
     "load": {
         "ports": {"in": 1}
