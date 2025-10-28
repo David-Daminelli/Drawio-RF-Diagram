@@ -5,6 +5,13 @@ funcs = Functions()
 def process_gain(df_circuit, components, param, it_lim = 500):
     it_count = 0
     df_circuit = df_circuit.copy()
+
+    # Exclude unconnected blocks
+    unc_blocks = df_circuit.loc[
+        (df_circuit['port_name'] == 'in') & (df_circuit['connected_block'].isna()),
+        'block_id'].unique()
+    df_circuit = df_circuit[~df_circuit['block_id'].isin(unc_blocks)]
+
     while df_circuit[param].isna().any():
         if it_count > it_lim:
             print("Exceeded maximum iterations while calculating powers. Possible open port.")
