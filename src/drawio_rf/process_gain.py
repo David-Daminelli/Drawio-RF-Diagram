@@ -75,5 +75,5 @@ def process_gain(df_circuit, components, param, it_lim = 500):
 
         edge_out_of_range = df_circuit.groupby('edge_id')['out_of_range'].any()
         df_circuit['out_of_range'] = df_circuit['edge_id'].map(edge_out_of_range)
-
+    print(f"Solved {param} in {it_count} iterations.")
     return df_circuit
