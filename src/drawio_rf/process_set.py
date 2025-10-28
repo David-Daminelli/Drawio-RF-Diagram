@@ -1,4 +1,6 @@
 import numpy as np
+from .functions import Functions
+funcs = Functions()
 
 def process_set(df_circuit, components, param):
     df_circuit = df_circuit.copy()
@@ -16,6 +18,7 @@ def process_set(df_circuit, components, param):
 
             mask = df_circuit['edge_id'].isin(set_id)
             for idx in df_circuit[mask].index:
-                df_circuit.at[idx, param] = np.atleast_1d(set_value)
+                cableloss = 0 if param == 'frequency' else funcs.cable(components)
+                df_circuit.at[idx, param] = np.sort(np.atleast_1d(set_value)) + cableloss
 
     return df_circuit

@@ -47,7 +47,9 @@ def process_gain(df_circuit, components, param, it_lim = 500):
 
                 # Update all output powers
                 if param == 'power':
-                    calc = (powers[0] + gain_value) + funcs.cable(components)
+                    sorted_power = np.sort(np.atleast_1d(np.array(powers[0])))
+                    sorted_gain = np.sort(np.atleast_1d(np.array(gain_value)))
+                    calc = (sorted_power + sorted_gain) + funcs.cable(components)
                 elif param == 'frequency':
                     if isinstance(gain_value, list): # if value is list, so call the related function
                         calc = getattr(funcs, gain_value[0])(powers, gain_value[1])
@@ -59,11 +61,11 @@ def process_gain(df_circuit, components, param, it_lim = 500):
                     df_circuit.at[idx, param] = np.array(calc)
 
     if param == 'power':
-        df_circuit['out_of_range'] = np.where(
-            (df_circuit[param] > df_circuit['max']) | (df_circuit[param] < df_circuit['min']),
-            True,
-            False
+        df_circuit['out_of_range'] = df_circuit.apply(
+            lambda r: funcs.out_of_range(r[param], r['min'], r['max']),
+            axis=1
         )
+
         edge_out_of_range = df_circuit.groupby('edge_id')['out_of_range'].any()
         df_circuit['out_of_range'] = df_circuit['edge_id'].map(edge_out_of_range)
 
