@@ -47,7 +47,7 @@ def process_gain(df_circuit, components, param, it_lim = 500):
 
                 # Update all output powers
                 if param == 'power':
-                    calc = (powers[0] + gain_value)
+                    calc = (powers[0] + gain_value) + funcs.cable(components)
                 elif param == 'frequency':
                     if isinstance(gain_value, list): # if value is list, so call the related function
                         calc = getattr(funcs, gain_value[0])(powers, gain_value[1])

@@ -24,3 +24,10 @@ class Functions:
         out = np.concatenate([inp*(i+1) for i in range(harms)])
 
         return np.unique(out)
+
+    def cable(self, components):
+        cable = components.get('cable', None)
+        if cable is None:
+            return 0
+        else:
+            return cable['gain_power']['in-out']
