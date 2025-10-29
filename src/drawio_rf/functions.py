@@ -24,3 +24,33 @@ class Functions:
         out = np.concatenate([inp*(i+1) for i in range(harms)])
 
         return np.unique(out)
+
+    def cable(self, components):
+        cable = components.get('cable', None)
+        if cable is None:
+            return 0
+        else:
+            return np.sort(np.array(cable['gain_power']['in-out']))
+
+    def out_of_range(self, val, vmin, vmax):
+        # Handle None explicitly
+        if val is None:
+            return False
+
+        # If it's a numpy array, check element-wise
+        if isinstance(val, np.ndarray):
+            if val.size == 0:
+                return False  # empty array → nothing out of range
+            mask = ~np.isnan(val)  # ignore NaNs
+            if not np.any(mask):
+                return False  # all elements are NaN
+            return np.any((val[mask] > vmax) | (val[mask] < vmin))
+
+        # If it's a scalar, handle numeric types safely
+        try:
+            if np.isnan(val):
+                return False
+            return (val > vmax) or (val < vmin)
+        except TypeError:
+            # Non-numeric types (e.g., string, None-like)
+            return False

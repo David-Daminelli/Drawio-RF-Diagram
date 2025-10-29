@@ -1,7 +1,7 @@
 {
     "generator": {
         "ports": {"out": 1},
-        "set_power": {"out": -5},
+        "set_power": {"out": [-5, 0]},
         "set_frequency": {"out": 500e6},
         "max": {"out": 30},
         "min": {"out": 0}
@@ -21,5 +21,40 @@
     },
     "load": {
         "ports": {"in": 1}
+    },
+    "mixer":{
+        "ports" : {"in": [2,["LO", "IF"]], "out": [1, ["RF"]]},
+        "gain_power"  : {"IF-RF": -7},
+        "gain_frequency" : {"IF-LO-RF": ["mixer", 0]},
+        "max"   : {"IF": 23, "LO": 16},
+        "min"   : {"LO": 10}
+    },
+    "amplifier":{
+        "ports" : {"in": 1, "out": 1},
+        "gain_power"  : {"in-out": 20},
+        "gain_frequency" : {"in-out": ["amplifier", 3]},
+        "max"   : {"in": 8}
+    },
+    "lowpass filter":{
+        "ports" : {"in": 1, "out": 1},
+        "gain_power"  : {"in-out": -1},
+        "gain_frequency" : {"in-out": ["bandpass", [0, 600e6]]},
+        "max"   : {"in": 40}
+    },
+    "bandpass filter":{
+        "ports" : {"in": 1, "out": 1},
+        "gain_power"  : {"in-out": -1},
+        "gain_frequency" : {"in-out": ["bandpass", [1000e6, 1600e6]]},
+        "max"   : {"in": 40}
+    },
+    "freq multiplier":{
+        "ports" : {"in": 1, "out": 1},
+        "gain_power"  : {"in-out": -11},
+        "gain_frequency" : {"in-out": 2},
+        "max"   : {"in": 33}
+    },
+    "cable":{
+        "ports" : {"in": 1, "out": 1},
+        "gain_power"  : {"in-out": [-0.1, -0.5]}
     }
 }

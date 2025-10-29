@@ -25,15 +25,22 @@ def write_drawio(df_circuit, og_path, output_path=None):
                 # Define power color
                 color = '#FF0000' if is_out_of_range else '#00AA00'  # vermelho ou verde
 
-                # Set values to Nan in case of errors
+
+                power_value = np.atleast_1d(power_value)
                 try:
-                    power_str = f"{power_value:.2f}dBm"
+                    power_str = "".join(f"{p:.2f} " for p in power_value)
+                    if power_value.size > 1:
+                        power_str = f'[{power_str.strip()}]dBm' #if power_str != "" else "NaN"
+                    else:
+                        power_str = f'{power_str.strip()}dBm'
                 except:
                     power_str = "NaN"
 
                 freq_value = np.atleast_1d(freq_value)
-                freq_str = "".join(f"{eng(f, precision=3)}Hz\n" if not np.isnan(f) else "" for f in freq_value
-)
+                try:
+                    freq_str = "".join(f"{eng(f, precision=3)}Hz\n" if not np.isnan(f) else "NaN" for f in freq_value)
+                except:
+                    freq_str = "NaN"
 
                 # Final text using HTML
                 cell.set('value',
