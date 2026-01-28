@@ -69,6 +69,9 @@ def build_df(blocks, json_path):
                     "frequency" : None,
                     "max" : components[value].get("max", {}).get(port_name, None),
                     "min" : components[value].get("min", {}).get(port_name, None),
+                    "price": components[value].get("price", {}),
+                    "current": components[value].get("current", 0),
+                    "voltage": components[value].get("voltage", 0),
                 })
 
 
