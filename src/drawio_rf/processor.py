@@ -66,6 +66,7 @@ def build_df(blocks, json_path):
                     "edge_id"   : con[0],
                     "connected_block": con[1],
                     "power"     : con[3],
+                    "unit": components[value].get("unit", 'dBm'),
                     "frequency" : None,
                     "max" : components[value].get("max", {}).get(port_name, None),
                     "min" : components[value].get("min", {}).get(port_name, None),

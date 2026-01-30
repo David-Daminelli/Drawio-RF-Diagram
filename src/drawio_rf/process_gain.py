@@ -55,8 +55,11 @@ def process_gain(df_circuit, components, param, it_lim = 500):
                 # Update all output powers
                 if param == 'power':
                     sorted_power = np.sort(np.atleast_1d(np.array(powers[0])))
-                    sorted_gain = np.sort(np.atleast_1d(np.array(gain_value)))
-                    calc = (sorted_power + sorted_gain) + funcs.cable(components)
+                    if isinstance(gain_value, list) and isinstance(gain_value[0], str): # if value is list, so call the related function
+                        calc = getattr(funcs, gain_value[0])(powers, gain_value[1])
+                    else:
+                        sorted_gain = np.sort(np.atleast_1d(np.array(gain_value)))
+                        calc = (sorted_power + sorted_gain) + funcs.cable(components)
                 elif param == 'frequency':
                     if isinstance(gain_value, list): # if value is list, so call the related function
                         calc = getattr(funcs, gain_value[0])(powers, gain_value[1])

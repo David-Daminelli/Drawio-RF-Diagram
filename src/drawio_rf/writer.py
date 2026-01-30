@@ -11,6 +11,7 @@ def write_drawio(df_circuit, og_path, output_path=None):
 
     # Map edge_id → power, out_of_range e frequency
     edge_power_dict = dict(zip(df_circuit['edge_id'], df_circuit['power']))
+    edge_power_unit_dict = dict(zip(df_circuit['edge_id'], df_circuit['unit']))
     edge_status_dict = dict(zip(df_circuit['edge_id'], df_circuit['out_of_range']))
     edge_freq_dict = dict(zip(df_circuit['edge_id'], df_circuit['frequency']))
 
@@ -19,6 +20,7 @@ def write_drawio(df_circuit, og_path, output_path=None):
             edge_id = cell.get('id')
             if edge_id in edge_power_dict:
                 power_value = edge_power_dict[edge_id]
+                power_unit = edge_power_unit_dict.get(edge_id, 'dBm')
                 is_out_of_range = edge_status_dict.get(edge_id, False)
                 freq_value = edge_freq_dict.get(edge_id, None)
 
@@ -30,9 +32,9 @@ def write_drawio(df_circuit, og_path, output_path=None):
                 try:
                     power_str = "".join(f"{p:.2f} " for p in power_value)
                     if power_value.size > 1:
-                        power_str = f'[{power_str.strip()}]dBm' #if power_str != "" else "NaN"
+                        power_str = f'[{power_str.strip()}]{power_unit}' #if power_str != "" else "NaN"
                     else:
-                        power_str = f'{power_str.strip()}dBm'
+                        power_str = f'{power_str.strip()}{power_unit}'
                 except:
                     power_str = "NaN"
 

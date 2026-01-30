@@ -19,6 +19,15 @@ class Functions:
 
         return np.unique(np.abs(result))
 
+    def power_detector(self, inp, coefs):
+        '''
+        Coefs must be given in descending order, e.g., [a_n, a_(n-1), ..., a_1, a_0]
+        '''
+        inp = np.atleast_1d(inp[0])
+        out = np.polyval(coefs, inp)
+
+        return out
+
     def amplifier(self, inp, harms):
         inp = np.atleast_1d(inp[0])
         out = np.concatenate([inp*(i+1) for i in range(harms)])
