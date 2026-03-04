@@ -9,20 +9,24 @@ def write_drawio(df_circuit, og_path, output_path=None):
     tree = ET.parse(og_path)
     root = tree.getroot()
 
-    # Map edge_id → power, out_of_range e frequency
-    edge_power_dict = dict(zip(df_circuit['edge_id'], df_circuit['power']))
-    edge_power_unit_dict = dict(zip(df_circuit['edge_id'], df_circuit['unit']))
-    edge_status_dict = dict(zip(df_circuit['edge_id'], df_circuit['out_of_range']))
-    edge_freq_dict = dict(zip(df_circuit['edge_id'], df_circuit['frequency']))
+    # Create a lookup dictionary for edges
+    df_edges = (
+        df_circuit
+        .drop_duplicates(subset=['edge_id'])
+        .set_index('edge_id')
+        [['power', 'unit', 'out_of_range', 'frequency']]
+    )
 
     for cell in root.iter('mxCell'):
         if cell.get('edge') == '1':
             edge_id = cell.get('id')
-            if edge_id in edge_power_dict:
-                power_value = edge_power_dict[edge_id]
-                power_unit = edge_power_unit_dict.get(edge_id, 'dBm')
-                is_out_of_range = edge_status_dict.get(edge_id, False)
-                freq_value = edge_freq_dict.get(edge_id, None)
+            if edge_id in df_edges.index:
+                row = df_edges.loc[edge_id]
+
+                power_value = row.get('power')
+                power_unit = row.get('unit', 'dBm')
+                is_out_of_range = row.get('out_of_range', False)
+                freq_value = row.get('frequency')
 
                 # Define power color
                 color = '#FF0000' if is_out_of_range else '#00AA00'  # vermelho ou verde
